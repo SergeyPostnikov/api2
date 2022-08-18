@@ -3,7 +3,7 @@ This command line application is a api client implementation whose purpose is to
 
 ## for quick start use: 
 ```
-git clone https://github.com/SergeyPostnikov/dvmn_study.git
+git clone https://github.com/SergeyPostnikov/api2
 pip install -r requirements.txt
 python url_shortener.py
 ```
