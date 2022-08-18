@@ -4,7 +4,7 @@ This command line application is a api client implementation whose purpose is to
 before start you have to:
  - register on bitly.com
  - get personal token
- - create .env file
+ - create .env file on project directory
  - make a record formatted as "TOKEN=YUORTOKEN"
 ## for start use: 
 ```
