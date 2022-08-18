@@ -27,7 +27,7 @@ def long_link(token, bitlink):
     host = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}'
     response = requests.get(host, headers=headers)
     response.raise_for_status()
-    return response.json().get('long_url'), count_clicks(token, bitlink)
+    return response.json().get('long_url')
 
 
 def is_bitlink(link):
@@ -35,15 +35,14 @@ def is_bitlink(link):
 
 
 if __name__ == '__main__':
-    # token = '9fd6cf79ea689b26b0f0db72f03089fc9c176e7f'  
-    # url = input('Введите ссылку: ')
+    token = os.getenv('TOKEN')  
+    url = input('Введите ссылку: ')
 
-    # parse_result = urlparse(url) 
-    # if parse_result.hostname == 'bit.ly':
-    #     print(long_link(
-    #         token=token, 
-    #         bitlink=f'{parse_result.hostname}{parse_result.path}'
-    #         ))
-    # else:
-    #     print('Битлинк', shorten_link(token, url))
-    print(os.getenv('TOKEN'))
+    parse_result = urlparse(url) 
+    if parse_result.hostname == 'bit.ly':
+        print(long_link(
+            token=token, 
+            bitlink=f'{parse_result.hostname}{parse_result.path}'
+            ))
+    else:
+        print('Битлинк', shorten_link(token, url))
