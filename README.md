@@ -5,7 +5,7 @@ before start you have to:
  - register on bitly.com
  - get personal token
  - create .env file
- - make note formatted as "TOKEN=YUORTOKEN"
+ - make a record formatted as "TOKEN=YUORTOKEN"
 ## for start use: 
 ```
 git clone https://github.com/SergeyPostnikov/api2
