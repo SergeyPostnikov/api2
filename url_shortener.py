@@ -3,7 +3,6 @@ import os
 
 from urllib.parse import urlparse
 from dotenv import load_dotenv
-load_dotenv()
 
 
 def count_clicks(token, bitlink):
@@ -31,10 +30,15 @@ def long_link(token, bitlink):
 
 
 def is_bitlink(link):
-    return urlparse(link).hostname == 'bit.ly' 
+    headers = {'Authorization': token}
+    host = f'https://api-ssl.bitly.com/v4/bitlinks/{link}'
+    response = requests.get(host, headers=headers)
+    response.raise_for_status()
+    return response.json().get('long_url')
 
 
 if __name__ == '__main__':
+    load_dotenv()
     token = os.getenv('TOKEN')  
     url = input('Введите ссылку: ')
 
