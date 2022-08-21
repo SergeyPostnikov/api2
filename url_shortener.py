@@ -5,6 +5,15 @@ from urllib.parse import urlparse
 from dotenv import load_dotenv
 
 
+def auth(f):
+    def wrapper(*args, **kwargs):
+        load_dotenv()
+        authorization_token = os.getenv('BITLY_TOKEN')
+        return f(authorization_token, *args, **kwargs)
+    return wrapper
+
+
+@auth
 def count_clicks(authorization_token, bitlink):
     headers = {'Authorization': authorization_token}
     url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}/clicks/summary'
@@ -13,6 +22,7 @@ def count_clicks(authorization_token, bitlink):
     return response.json().get('total_clicks')
 
 
+@auth
 def shorten_link(authorization_token, link):
     headers = {'Authorization': authorization_token}
     url = 'https://api-ssl.bitly.com/v4/shorten'
@@ -21,6 +31,7 @@ def shorten_link(authorization_token, link):
     return response.json().get('link')
 
 
+@auth
 def is_bitlink(authorization_token, bitlink):
     headers = {'Authorization': authorization_token}
     url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}'
@@ -29,15 +40,13 @@ def is_bitlink(authorization_token, bitlink):
     return response.ok
 
 
-if __name__ == '__main__':  
-    load_dotenv()
-    authorization_token = os.getenv('BITLY_TOKEN')  
+if __name__ == '__main__':    
     url = input('Введите ссылку: ')
     parsed_link = urlparse(url)
     link = f'{parsed_link.hostname}{parsed_link.path}'
 
-    if is_bitlink(authorization_token, link):
-        cilcks = count_clicks(authorization_token, link)
+    if is_bitlink(link):
+        cilcks = count_clicks(link)
         print(f"По вашей ссылке перешли {cilcks} раз(а)")
     else:
-        print('Битлинк', shorten_link(authorization_token, url))
+        print('Битлинк', shorten_link(url))
