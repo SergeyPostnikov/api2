@@ -21,13 +21,6 @@ def shorten_link(authorization_token, link):
     return response.json().get('link')
 
 
-def long_link(authorization_token, bitlink):
-    headers = {'Authorization': authorization_token}
-    url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}'
-    response = requests.get(url, headers=headers)
-    response.raise_for_status()
-    return response.json().get('long_url')
-
 
 def is_bitlink(link, authorization_token):
     headers = {'Authorization': authorization_token}
