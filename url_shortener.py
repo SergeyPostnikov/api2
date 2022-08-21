@@ -21,24 +21,23 @@ def shorten_link(authorization_token, link):
     return response.json().get('link')
 
 
-
-def is_bitlink(link, authorization_token):
+def is_bitlink(authorization_token, bitlink):
     headers = {'Authorization': authorization_token}
-    url = f'https://api-ssl.bitly.com/v4/bitlinks/{link}'
+    url = f'https://api-ssl.bitly.com/v4/bitlinks/{bitlink}'
     response = requests.get(url, headers=headers)
     response.raise_for_status()
-    return response.json().get('long_url')
+    return response.ok
 
 
 if __name__ == '__main__':  
     load_dotenv()
     authorization_token = os.getenv('BITLY_TOKEN')  
     url = input('Введите ссылку: ')
-    parsed_link = urlparse(url) 
-    if parsed_link.hostname == 'bit.ly':
-        cilcks = count_clicks(
-            authorization_token, 
-            f'{parsed_link.hostname}{parsed_link.path}')
+    parsed_link = urlparse(url)
+    link = f'{parsed_link.hostname}{parsed_link.path}'
+
+    if is_bitlink(authorization_token, link):
+        cilcks = count_clicks(authorization_token, link)
         print(f"По вашей ссылке перешли {cilcks} раз(а)")
     else:
         print('Битлинк', shorten_link(authorization_token, url))
