@@ -4,6 +4,8 @@ import os
 from urllib.parse import urlparse
 from dotenv import load_dotenv
 
+import argparse
+
 
 def count_clicks(authorization_token, bitlink):
     headers = {'Authorization': authorization_token}
@@ -27,18 +29,19 @@ def is_bitlink(authorization_token, bitlink):
     response = requests.get(url, headers=headers)
     return response.ok
 
-
-def main(link):    
-    if is_bitlink(authorization_token, link):
-        cilcks = count_clicks(authorization_token, link)
-        return f"По вашей ссылке перешли {cilcks} раз(а)"
-    return 'Битлинк', shorten_link(authorization_token, url)
-
-
+    
 if __name__ == '__main__':  
     load_dotenv()
     authorization_token = os.getenv('BITLY_TOKEN')  
-    url = input('Введите ссылку: ')
-    parsed_link = urlparse(url)
+
+    parser = argparse.ArgumentParser(description='Введите ссылку: ')
+    parser.add_argument('url', help='ссылка')
+    args = parser.parse_args()    
+    parsed_link = urlparse(args.url)
     link = f'{parsed_link.hostname}{parsed_link.path}'
-    print(main(link))
+
+    if is_bitlink(authorization_token, link):
+        cilcks = count_clicks(authorization_token, link)
+        print(f"По вашей ссылке перешли {cilcks} раз(а)")
+    else:
+        print('Битлинк', shorten_link(authorization_token, args.url))
