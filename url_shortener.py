@@ -28,15 +28,17 @@ def is_bitlink(authorization_token, bitlink):
     return response.ok
 
 
+def main(link):    
+    if is_bitlink(authorization_token, link):
+        cilcks = count_clicks(authorization_token, link)
+        return f"По вашей ссылке перешли {cilcks} раз(а)"
+    return 'Битлинк', shorten_link(authorization_token, url)
+
+
 if __name__ == '__main__':  
     load_dotenv()
     authorization_token = os.getenv('BITLY_TOKEN')  
     url = input('Введите ссылку: ')
     parsed_link = urlparse(url)
     link = f'{parsed_link.hostname}{parsed_link.path}'
-
-    if is_bitlink(authorization_token, link):
-        cilcks = count_clicks(authorization_token, link)
-        print(f"По вашей ссылке перешли {cilcks} раз(а)")
-    else:
-        print('Битлинк', shorten_link(authorization_token, url))
+    print(main(link))
